@@ -1,0 +1,45 @@
+[Unit]
+Description=Zed PostgreSQL Container
+Requires=zed-caddy.service
+After=zed-caddy.service
+
+[Container]
+ContainerName=zed-postgresql
+
+Pod=zed.pod
+StartWithPod=true
+
+# Generate Password: pwgen -c -n -s 64 1
+Environment=POSTGRES_PASSWORD=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Environment=POSTGRES_USER=zed
+Environment=POSTGRES_DB=zed
+EnvironmentFile=.env
+
+# Health Check
+HealthCmd=["pg_isready","-d","zed","-U","zed"]
+HealthInterval=10s
+HealthRetries=5
+HealthTimeout=20s
+HealthStartPeriod=5s
+
+# Wait until Container is healthy before starting other Containers
+Notify=healthy
+
+# Start other Containers anyway
+# Notify=none
+
+# Image
+Image=docker.io/library/postgres:18-trixie
+Pull=missing
+
+# User
+User=root
+
+# Network
+Network=container:zed-caddy
+
+# Volumes
+Volume=/home/podman/containers/db/zed/postgresql:/var/lib/postgresql:rw,z
+
+[Service]
+Restart=always

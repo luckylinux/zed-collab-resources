@@ -1,0 +1,49 @@
+[Unit]
+Description=ZED Garage Container
+Wants=zed-caddy.service
+After=zed-caddy.service
+
+[Container]
+ContainerName=zed-garage
+
+Pod=zed.pod
+StartWithPod=true
+
+# Common Environment Settings
+EnvironmentFile=.env
+
+# Server Environment Settings
+EnvironmentFile=.env.garage
+
+# Other Environment Settings
+Environment=RUST_LOG=garage=info
+
+# These Settings don't appear to do anything ...
+Environment=GARAGE_AUTO_LAYOUT_ZONE=zone1
+Environment=GARAGE_AUTO_LAYOUT_CAPACITY=32G
+
+# Network
+Network=container:zed-caddy
+
+# Exposed Ports
+# PublishPort=3900:3900
+# PublishPort=3902:3902
+
+# Image
+Image=docker.io/dxflrs/garage:v2.3.0
+Pull=missing
+
+# User
+# User=root
+
+# Volumes
+Volume=/home/podman/containers/config/zed/garage/garage.toml:/etc/garage.toml:ro,Z
+Volume=/home/podman/containers/data/zed/garage/meta:/var/lib/garage/meta:rw,Z
+Volume=/home/podman/containers/data/zed/garage/data:/var/lib/garage/data:rw,Z
+
+[Service]
+Restart=always
+
+# Disable if Part of a Pod
+#[Install]
+#WantedBy=multi-user.target

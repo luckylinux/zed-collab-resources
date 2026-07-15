@@ -1,0 +1,46 @@
+[Unit]
+Description=Zed Server Container
+Requires=zed-caddy.service zed-postgresql.service zed-livekit-server.service zed-garage.service
+After=zed-caddy.service zed-postgresql.service zed-livekit-server.service zed-garage.service
+
+[Container]
+ContainerName=zed-server
+
+Pod=zed.pod
+StartWithPod=true
+
+# Common Environment Settings
+EnvironmentFile=.env
+
+# Server Environment Settings
+EnvironmentFile=.env.server
+
+# Image
+Image=localhost/zed-server:1.10.3
+Pull=missing
+
+# Setup / Migrate
+# Exec=/app/collab serve all
+Exec=serve all
+
+# Command
+# Exec=/app/zed-collab serve all
+
+# Network
+Network=container:zed-caddy
+
+# Exposed Ports
+# PublishPort=8080:8080
+
+# Security Configuration
+NoNewPrivileges=true
+
+# Volumes
+Volume=./.env.server:/app/.env.toml:ro,z
+
+[Service]
+Restart=always
+
+# Disable if Part of a Pod
+#[Install]
+#WantedBy=multi-user.target

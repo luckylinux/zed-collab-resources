@@ -1,0 +1,25 @@
+[Unit]
+Description=Zed Caddy Container
+
+[Service]
+Restart=always
+
+[Container]
+ContainerName=zed-caddy
+
+Pod=zed.pod
+StartWithPod=true
+
+Environment=CADDY_DOCKER_CADDYFILE_PATH=/etc/caddy/Caddyfile
+EnvironmentFile=.env.caddy
+
+Image=docker.io/library/caddy:latest
+Pull=always
+
+NoNewPrivileges=true
+
+Volume=./Caddyfile:/etc/caddy/Caddyfile:ro,z
+Volume=/home/podman/containers/data/zed/caddy:/data/caddy:z
+Volume=/home/podman/containers/log/zed/caddy:/var/log:z
+Volume=/home/podman/containers/config/zed/caddy:/config/caddy:z
+Volume=/home/podman/containers/certificates/letsencrypt:/certificates:ro,z

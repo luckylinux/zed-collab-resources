@@ -1,0 +1,45 @@
+[Unit]
+Description=ZED OAuth2 Proxy Container
+Requires=zed-caddy.service zed-oauth2-redis.service
+After=zed-caddy.service zed-oauth2-redis.service
+
+[Container]
+ContainerName=zed-oauth2-proxy
+
+Pod=zed.pod
+StartWithPod=true
+
+# General Settings
+EnvironmentFile=.env
+
+# Specific Settings
+EnvironmentFile=.env.oauth2-proxy
+
+# Other Environment Settings
+# Environment=XXX=xxx
+
+# Image
+Image=quay.io/oauth2-proxy/oauth2-proxy:v7.15.3-alpine
+Pull=missing
+
+# User
+User=root
+
+# Network
+Network=container:zed-caddy
+
+# Command
+# Exec=oauth2-proxy --config /oauth2-proxy.cfg --alpha-config /alpha-config.yml
+# Exec=--config /oauth2-proxy.cfg --alpha-config /alpha-config.yml
+Exec=--alpha-config /alpha-config.yml
+
+# Volumes
+Volume=/home/podman/containers/config/zed/oauth2-proxy/oauth2-proxy.cfg:/oauth2-proxy.cfg:ro,Z
+Volume=/home/podman/containers/config/zed/oauth2-proxy/alpha-config.yml:/alpha-config.yml:ro,Z
+
+# Debug
+# Entrypoint=/bin/sh
+# PodmanArgs=-it
+
+[Service]
+Restart=always

@@ -1,0 +1,22 @@
+# Garage Configuration File - Single Host Standalone Mode
+metadata_dir = "/var/lib/garage/meta"
+data_dir = "/var/lib/garage/data"
+db_engine = "sqlite"
+
+# Single-node deployment (NO redundancy across multiple servers)
+replication_factor = 1
+compression_level = 1
+
+# Network bindings inside the container
+rpc_bind_addr = "[::]:3901"
+api_bind_addr = "[::]:3900"
+s3_api_bind_addr = "[::]:3902"
+
+# Cluster communication security (Required but ignored in standalone mode)
+# Generate using: openssl rand -hex 32
+rpc_secret = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+[s3_api]
+s3_region = "homelab"
+api_bind_addr = "[::]:3902"
+root_domain = ".s3.garage.localhost"

@@ -1,0 +1,13 @@
+[Pod]
+PodName=zed
+
+# Zed HTTPS (proxied via Caddy + oauth2-proxy)
+PublishPort=80:80/tcp
+PublishPort=443:443/tcp
+PublishPort=443:443/udp
+
+# Network Mode
+Network=pasta
+
+[Install]
+WantedBy=default.target
